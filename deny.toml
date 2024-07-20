@@ -1,15 +1,43 @@
-[advisories]
-# 禁止任何带有已知安全漏洞的依赖项
-unmaintained = true
 [licenses]
-# 允许使用 MIT 或 Apache-2.0 许可证的依赖项
-allowed = ["MIT", "Apache-2.0"]
+allow = [
+  "MIT",
+  "CC0-1.0",
+  "ISC",
+  "OpenSSL",
+  "Unlicense",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "Apache-2.0",
+  "Apache-2.0 WITH LLVM-exception",
+  "Zlib",
+]
 
-# 禁止使用 GPL（GNU General Public License）许可证的依赖项
-forbidden = ["GPL-*"]
-[sources]
-# 仅允许从 crates.io 获取依赖项
-allowed = ["registry+https://github.com/rust-lang/crates.io-index"]
+unlicensed = "warn"
+default = "warn"
 
-# 禁止从 Git 仓库或其他不受信任的源获取依赖项
-forbidden = ["git+*"]
+private = { ignore = true }
+
+[[licenses.clarify]]
+name = "ring"
+version = "*"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [{ path = "LICENSE", hash = 0xbd0eed23 }]
+
+[advisories]
+ignore = [
+  # term is looking for a new maintainer
+  # https://github.com/timberio/vector/issues/6225
+  "RUSTSEC-2018-0015",
+
+  # `net2` crate has been deprecated; use `socket2` instead
+  # https://github.com/timberio/vector/issues/5582
+  "RUSTSEC-2020-0016",
+
+  # Type confusion if __private_get_type_id__ is overridden
+  # https://github.com/timberio/vector/issues/5583
+  "RUSTSEC-2020-0036",
+
+  # stdweb is unmaintained
+  # https://github.com/timberio/vector/issues/5585
+  "RUSTSEC-2020-0056",
+]
