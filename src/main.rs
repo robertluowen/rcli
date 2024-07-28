@@ -1,5 +1,8 @@
 // rcli csv =i input.csv -o output.json -header -d ','
 use clap::Parser;
+// use csv::Reader;
+// use serde::{Deserialize, Serialize};
+use std::path::Path;
 #[derive(Debug, Parser)]
 #[command(name ="rcli",version, author,about,long_about = None)]
 struct Opts {
@@ -9,7 +12,7 @@ struct Opts {
 
 #[derive(Debug, Parser)]
 enum SubCommand {
-    #[command(name = "csv", about = "Show CSV ,or Convert CSV to other formats")]
+    #[command(name = "csv", about = "Show23 CSV ,or Convert CSV to other formats")]
     Csv(CsvOpts),
 }
 
@@ -26,7 +29,7 @@ struct CsvOpts {
 }
 
 fn verify_input_file(filename: &str) -> Result<String, &'static str> {
-    if std::path::Path::new(filename).exists() {
+    if Path::new(filename).exists() {
         Ok(filename.into())
     } else {
         Err("Error creating")
