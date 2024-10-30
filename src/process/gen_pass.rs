@@ -1,6 +1,6 @@
-// use crate::opts::GenPassOpts;
-
 use rand::seq::SliceRandom;
+use zxcvbn::zxcvbn;
+
 const UPPER: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWER: &[u8] = b"abcdefghijklmnopqrstuvwxyz";
 const NUMBER: &[u8] = b"0123456789";
@@ -39,7 +39,10 @@ pub fn process_genpass(
         password.push(*c);
     }
     password.shuffle(&mut rng);
-    // TODO: make sure the password has at least one of each type
-    println!("{:?}", String::from_utf8(password)?); // String::from_utf8(password);
+    let password = String::from_utf8(password)?;
+    println!("{:?}", password); // String::from_utf8(password);
+                                // output the password strength
+    let estimate = zxcvbn(&password, &[]);
+    eprintln!("{}", estimate.score()); // 3
     Ok(())
 }
