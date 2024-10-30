@@ -1,21 +1,27 @@
 use anyhow::Result;
 use clap::Parser;
-use rcli::{process::process_csv, Opts, SubCommand};
+use rcli::{process_csv, process_genpass, Opts, SubCommand};
 
 fn main() -> Result<()> {
     let opts = Opts::parse();
     match opts.cmd {
-        SubCommand::Csv(opts2) => {
-            let output = if let Some(output) = opts2.output {
+        SubCommand::Csv(opts) => {
+            let output = if let Some(output) = opts.output {
                 output.clone()
             } else {
                 // "output.csv".into()
-                format!("output.{}", opts2.format)
+                format!("output.{}", opts.format)
             };
-            process_csv(&opts2.input, output, opts2.format)?;
+            process_csv(&opts.input, output, opts.format)?;
         }
         SubCommand::GenPass(opts) => {
-            println!("Generate password : {:?}", opts);
+            process_genpass(
+                opts.length,
+                opts.uppercase,
+                opts.lowercase,
+                opts.number,
+                opts.symbol,
+            )?;
         }
     }
     Ok(())
