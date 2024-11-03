@@ -1,6 +1,8 @@
 pub mod base64;
 pub mod csv;
 pub mod genpass;
+use std::path::Path;
+
 pub use self::{base64::Base64SubCommand, csv::CsvOpts, genpass::GenPassOpts};
 
 use clap::Parser;
@@ -20,4 +22,24 @@ pub enum SubCommand {
     GenPass(GenPassOpts),
     #[command(subcommand)]
     Base64(Base64SubCommand),
+}
+
+fn verify_input_file(filename: &str) -> Result<String, &'static str> {
+    if filename == "-" || Path::new(filename).exists() {
+        Ok(filename.into())
+    } else {
+        Err("Error creating") // 静态版本
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_verify_input_file() {
+        assert_eq!(verify_input_file("-"), Ok("-".into()));
+        assert_eq!(verify_input_file("*"), Err("Error creating"));
+        assert_eq!(verify_input_file("Cargo.toml"), Ok("Cargo.toml".into()));
+        assert_eq!(verify_input_file("Cargo.toml2"), Err("Error creating"));
+    }
 }

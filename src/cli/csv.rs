@@ -1,5 +1,7 @@
 use clap::Parser;
-use std::{fmt, path::Path, str::FromStr};
+use std::{fmt, str::FromStr};
+
+use super::verify_input_file;
 
 #[derive(Debug, Parser)]
 pub struct CsvOpts {
@@ -19,14 +21,6 @@ pub struct CsvOpts {
 pub enum OutputFormat {
     Json,
     Yaml,
-}
-
-fn verify_input_file(filename: &str) -> Result<String, &'static str> {
-    if Path::new(filename).exists() {
-        Ok(filename.into())
-    } else {
-        Err("Error creating") // 静态版本
-    }
 }
 
 fn parse_format(format: &str) -> Result<OutputFormat, anyhow::Error> {
